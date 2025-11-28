@@ -44,7 +44,8 @@ func (app *application) mount() http.Handler {
 		w.Write([]byte("Server is running..."))
 	})
 
-	productsHandler := products.NewHandler(nil)
+	productsService := products.NewService()
+	productsHandler := products.NewHandler(productsService)
 	r.Get("/products", productsHandler.ListProducts)
 
 	return r

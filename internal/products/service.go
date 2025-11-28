@@ -1,5 +1,18 @@
 package products
 
-type Service interface{
+import "context"
 
+type Service interface {
+	ListProducts(ctx context.Context) error
+}
+
+type svc struct {
+}
+
+func NewService() Service {
+	return &svc{}
+}
+
+func (svc *svc) ListProducts(ctx context.Context) error {
+	return nil
 }
