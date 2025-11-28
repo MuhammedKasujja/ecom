@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/MuhammedKasujja/ecom/internal/products"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
@@ -43,19 +44,22 @@ func (app *application) mount() http.Handler {
 		w.Write([]byte("Server is running..."))
 	})
 
+	productsHandler := products.NewHandler(nil)
+	r.Get("/products", productsHandler.ListProducts)
+
 	return r
 }
 
 func (app *application) run(h http.Handler) error {
 	srv := &http.Server{
-		Addr: app.config.addr,
-		Handler: h,
+		Addr:         app.config.addr,
+		Handler:      h,
 		WriteTimeout: time.Second * 30,
-		ReadTimeout: time.Second * 10,
-		IdleTimeout: time.Minute,
+		ReadTimeout:  time.Second * 10,
+		IdleTimeout:  time.Minute,
 	}
 
 	log.Printf("server has started at addr %s", srv.Addr)
 
-	return  srv.ListenAndServe()
+	return srv.ListenAndServe()
 }
